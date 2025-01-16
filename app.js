@@ -12,7 +12,7 @@ app.use(session({
 }));
 
 // Middleware para mostrar detalles de la sesión
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     if (req.session) {
         if (!req.session.createdAt) {
             req.session.createdAt = new Date(); // Asignamos la fecha de creación de la sesión
@@ -21,11 +21,12 @@ app.use((req, res, next) => {
     }
     next();
 
-});
+});*/
 
 app.get('/login/:User',(req,res)=>{
+    const User = req.params.User;
     if (!req.session.createdAt){
-        req.session.User=req.params.User;
+        req.session.User = User;
         req.session.createdAt = new Date();
         req.session.lastAccess = new Date();
         res.send('La sesión ha sido iniciada: ');
@@ -75,7 +76,7 @@ res.json({
 
 // Ruta para mostrar la información de la sesión
 app.get('/session', (req, res) => {
-    if (req.session) {
+    if (req.session && req.session.User) {
         const User = req.session.User;
         const sessionId = req.session.id;
         const createdAt = req.session.createdAt;
